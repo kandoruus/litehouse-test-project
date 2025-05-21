@@ -53,6 +53,7 @@ export default class AppStore implements AppStoreInterface {
       nextBtn.disabled = false;
       lastBtn.disabled = false;
     }
+    window.scrollTo(0, 0);
   };
 
   load = (): void => {
