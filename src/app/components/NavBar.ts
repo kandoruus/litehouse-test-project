@@ -4,12 +4,13 @@ const styles: string = `
 .nav-bar-wrapper {
   display: flex;
   justify-content: center;
-  gap: var(--SMALL_PADDING);
+  gap: var(--STANDARD_PADDING);
 }
 .nav-bar-button {
   background-color: transparent;
   border:none;
   color: var(--LIGHT_COLOR);
+  font-size: 1.5rem;
 }
 .nav-bar-button:disabled {
   color: var(--DISABLED_COLOR);
