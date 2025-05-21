@@ -1,4 +1,4 @@
-import type { AppData } from "../types";
+import type { AppData } from "./types";
 
 export const BLANK_APP_DATA: AppData = {
   _dataList: [],
@@ -15,3 +15,5 @@ export const KITSU_HEADERS = {
 };
 
 export const KITSU_DEFAULT_URL = "https://kitsu.io/api/edge/anime?page[limit]=10";
+
+export const MAIN_CSS = "./src/app/styles.css";

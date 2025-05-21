@@ -17,7 +17,7 @@ img {
   --DARK_COLOR: #333;
   --MID_COLOR: #4c358d;
   --LIGHT_COLOR: #f5f5f5;
-  --FONT_COLOR: var(--LIGHT_COLOR);
+  --DISABLED_COLOR: #f5f5f579;
   /* Font Properties */
   --LARGE_FONT: 2rem;
   /* Sizing */
@@ -30,6 +30,9 @@ img {
 /* ----------- App Styles ----------- */
 
 /* Utility Classes */
+.hidden {
+  display: none;
+}
 
 /* Body */
 body {
@@ -37,7 +40,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  color: var(--FONT_COLOR);
+  color: var(--LIGHT_COLOR);
 }
 
 /* Header Section */
@@ -58,6 +61,7 @@ header {
 footer {
   bottom: 0;
   padding: var(--SMALL_PADDING);
+  height: 34px;
 }
 
 /* Main Section */

@@ -1,3 +1,5 @@
+import { MAIN_CSS } from "../data/constants";
+
 const styles: string = `
 .card {
   min-height: 100px;
@@ -47,7 +49,7 @@ export default class MediaCard extends HTMLElement implements MediaCardInterface
 
   connectedCallBack() {
     this.#shadow.innerHTML = `
-      <link href="./src/app/styles.css" rel="stylesheet" type="text/css">
+      <link href="${MAIN_CSS}" rel="stylesheet" type="text/css">
       <style>
         ${styles}
       </style>

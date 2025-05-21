@@ -1,6 +1,6 @@
 import type { KitsuData } from "./interfaces";
 import { KITSU_DEFAULT_URL, KITSU_HEADERS } from "./constants";
-import type { AppData, MediaData } from "../types";
+import type { AppData, MediaData } from "./types";
 
 export const loadKitsuData = async (url: string = KITSU_DEFAULT_URL): Promise<AppData> => {
   const response = await fetch(url, { headers: KITSU_HEADERS });
