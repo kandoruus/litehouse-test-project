@@ -10,7 +10,7 @@ const styles: string = `
   background-color: transparent;
   border:none;
   color: var(--LIGHT_COLOR);
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 .nav-bar-button:disabled {
   color: var(--DISABLED_COLOR);
