@@ -44,7 +44,7 @@ h2 {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-  
+
 h2:hover {
   white-space: wrap;
   z-index: 10;
@@ -72,7 +72,7 @@ h2:hover {
   overflow: hidden;
 }
 
-@media only screen and (min-width: 639px) {
+@media only screen and (min-width: 624px) {
 
   
   .card {
