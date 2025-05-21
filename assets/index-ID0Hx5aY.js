@@ -40,6 +40,15 @@ h2 {
   text-align: center;
   width: 100%;
   padding: var(--STANDARD_PADDING);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+  
+h2:hover {
+  white-space: wrap;
+  z-index: 10;
+  cursor: default;
 }
 
 .card figure {
@@ -65,17 +74,7 @@ h2 {
 
 @media only screen and (min-width: 639px) {
 
-  h2 {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  h2:hover {
-    white-space: wrap;
-    z-index: 10;
-    cursor: default;
-  }
+  
   .card {
     height: var(--CARD_HEIGHT);
   }
