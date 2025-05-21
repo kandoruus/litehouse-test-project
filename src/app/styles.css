@@ -51,6 +51,7 @@ footer {
   z-index: 1;
   text-align: center;
   min-width: 320px;
+  box-shadow: 5px 0px 15px black;
 }
 
 header {

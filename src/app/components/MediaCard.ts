@@ -19,6 +19,7 @@ img {
   flex-direction: column;
   align-items: center;
   color: var(--DARK_COLOR);
+  box-shadow: 5px 5px 15px black;
 }
 
 .card figure {
