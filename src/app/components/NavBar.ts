@@ -1,4 +1,5 @@
-import AppStore from "../data/AppStore";
+import { NAV_BTN_DATA } from "../data/constants";
+import { createNavBarBtn } from "../data/functions";
 
 const styles: string = `
 .nav-bar-wrapper {
@@ -17,43 +18,56 @@ const styles: string = `
 }
 `;
 
-export default class NavBar extends HTMLElement {
-  constructor() {
+interface NavBarInterface {
+  enableButtons(onFirstPage: boolean, onLastPage: boolean): void;
+  disableButtons(): void;
+}
+
+export default class NavBar extends HTMLElement implements NavBarInterface {
+  #shadow: ShadowRoot = this.attachShadow({ mode: "open" });
+
+  #btns: HTMLButtonElement[] = [];
+
+  constructor(onClickFunctions: (() => void)[]) {
     super();
-    this.innerHTML = `
+    this.#shadow.innerHTML = `
       <style>
         ${styles}
       </style>
     `;
     const wrapper = document.createElement("div");
     wrapper.classList.add("nav-bar-wrapper");
-    const firstBtn = document.createElement("button");
-    firstBtn.classList.add("nav-bar-button");
-    firstBtn.id = "first-btn";
-    firstBtn.innerHTML = "First";
-    const prevBtn = document.createElement("button");
-    prevBtn.classList.add("nav-bar-button");
-    prevBtn.id = "prev-btn";
-    prevBtn.innerHTML = "&lt;&lt; Prev";
-    const nextBtn = document.createElement("button");
-    nextBtn.classList.add("nav-bar-button");
-    nextBtn.id = "next-btn";
-    nextBtn.innerHTML = "Next &gt;&gt;";
-    const lastBtn = document.createElement("button");
-    lastBtn.classList.add("nav-bar-button");
-    lastBtn.id = "last-btn";
-    lastBtn.innerHTML = "Last";
-    wrapper.appendChild(firstBtn);
-    wrapper.appendChild(prevBtn);
-    wrapper.appendChild(nextBtn);
-    wrapper.appendChild(lastBtn);
-    this.appendChild(wrapper);
 
-    const appStore: AppStore = AppStore.instance;
-    firstBtn.addEventListener("click", appStore.goToFirstPage);
-    prevBtn.addEventListener("click", appStore.goToPrevPage);
-    nextBtn.addEventListener("click", appStore.goToNextPage);
-    lastBtn.addEventListener("click", appStore.goToLastPage);
+    NAV_BTN_DATA.forEach(({ id, text }, index) => {
+      this.#btns.push(createNavBarBtn(id, text, onClickFunctions[index]));
+    });
+    this.#btns.forEach((btn) => {
+      wrapper.appendChild(btn);
+    });
+
+    this.#shadow.appendChild(wrapper);
+  }
+
+  disableButtons(): void {
+    this.#btns.forEach((btn) => {
+      btn.disabled = true;
+    });
+  }
+
+  enableButtons(onFirstPage: boolean, onLastPage: boolean): void {
+    if (onFirstPage) {
+      this.#btns.forEach((btn, index) => {
+        btn.disabled = index < 2;
+      });
+    } else if (onLastPage) {
+      this.#btns.forEach((btn, index) => {
+        btn.disabled = index > 1;
+      });
+    } else {
+      this.#btns.forEach((btn) => {
+        btn.disabled = false;
+      });
+    }
   }
 }
 

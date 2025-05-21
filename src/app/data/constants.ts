@@ -1,4 +1,4 @@
-import type { AppData } from "./types";
+import type { AppData, NavBtnData } from "./types";
 
 export const BLANK_APP_DATA: AppData = {
   _dataList: [],
@@ -17,3 +17,22 @@ export const KITSU_HEADERS = {
 export const KITSU_DEFAULT_URL = "https://kitsu.io/api/edge/anime?page[limit]=10";
 
 export const MAIN_CSS = "./src/app/styles.css";
+
+export const NAV_BTN_DATA: NavBtnData[] = [
+  {
+    id: "first-btn",
+    text: "First",
+  },
+  {
+    id: "prev-btn",
+    text: "&lt;&lt; Prev",
+  },
+  {
+    id: "next-btn",
+    text: "Next &gt;&gt;",
+  },
+  {
+    id: "last-btn",
+    text: "Last",
+  },
+];

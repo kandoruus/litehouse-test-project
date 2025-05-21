@@ -20,3 +20,16 @@ export const loadKitsuData = async (url: string = KITSU_DEFAULT_URL): Promise<Ap
   };
   return appData;
 };
+
+export const createNavBarBtn = (
+  id: string,
+  text: string,
+  onClick: () => void
+): HTMLButtonElement => {
+  const btn = document.createElement("button");
+  btn.classList.add("nav-bar-button");
+  btn.id = id;
+  btn.innerHTML = text;
+  btn.addEventListener("click", onClick);
+  return btn;
+};

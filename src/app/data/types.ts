@@ -12,3 +12,8 @@ export type AppData = {
   _nextPage: string;
   _prevPage: string;
 };
+
+export type NavBtnData = {
+  id: string;
+  text: string;
+};

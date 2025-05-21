@@ -2,9 +2,12 @@ import { loadKitsuData } from "./functions";
 import type { AppData, MediaData } from "./types";
 import { BLANK_APP_DATA } from "./constants";
 import MediaCard from "../components/MediaCard";
+import NavBar from "../components/NavBar";
 
 interface AppStoreInterface {
   dataList: MediaData[];
+  onFirstPage: boolean;
+  onLastPage: boolean;
   render(): void;
   load(url?: string): void;
   goToFirstPage(): void;
@@ -17,25 +20,31 @@ export default class AppStore implements AppStoreInterface {
   static instance: AppStore = new AppStore();
 
   #main: HTMLElement;
+  #navBar: NavBar;
 
   constructor(private _appData: AppData = BLANK_APP_DATA) {
     this.#main = document.getElementById("main") as HTMLElement;
+    const footer = document.getElementById("footer") as HTMLElement;
+    this.#navBar = new NavBar([
+      this.goToFirstPage,
+      this.goToPrevPage,
+      this.goToNextPage,
+      this.goToLastPage,
+    ]);
+    footer.appendChild(this.#navBar);
   }
 
   get dataList(): MediaData[] {
     return this._appData._dataList;
   }
 
-  disableButtons = (): void => {
-    const firstBtn = document.getElementById("first-btn") as HTMLButtonElement;
-    const prevBtn = document.getElementById("prev-btn") as HTMLButtonElement;
-    const nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
-    const lastBtn = document.getElementById("last-btn") as HTMLButtonElement;
-    firstBtn.disabled = true;
-    prevBtn.disabled = true;
-    nextBtn.disabled = true;
-    lastBtn.disabled = true;
-  };
+  get onFirstPage(): boolean {
+    return this._appData._prevPage === "";
+  }
+
+  get onLastPage(): boolean {
+    return this._appData._nextPage === "";
+  }
 
   render = (): void => {
     this.#main.innerHTML = "";
@@ -44,34 +53,15 @@ export default class AppStore implements AppStoreInterface {
       const mediaCard = new MediaCard(title, description, imgUrl);
       this.#main.appendChild(mediaCard);
     });
-    const firstBtn = document.getElementById("first-btn") as HTMLButtonElement;
-    const prevBtn = document.getElementById("prev-btn") as HTMLButtonElement;
-    const nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
-    const lastBtn = document.getElementById("last-btn") as HTMLButtonElement;
-    if (this._appData._prevPage === "") {
-      firstBtn.disabled = true;
-      prevBtn.disabled = true;
-      nextBtn.disabled = false;
-      lastBtn.disabled = false;
-    } else if (this._appData._nextPage === "") {
-      firstBtn.disabled = false;
-      prevBtn.disabled = false;
-      nextBtn.disabled = true;
-      lastBtn.disabled = true;
-    } else {
-      firstBtn.disabled = false;
-      prevBtn.disabled = false;
-      nextBtn.disabled = false;
-      lastBtn.disabled = false;
-    }
     window.scrollTo(0, 0);
   };
 
   load = (url?: string): void => {
-    this.disableButtons();
+    this.#navBar.disableButtons();
     loadKitsuData(url).then((newData) => {
       this._appData = { ...newData };
       this.render();
+      this.#navBar.enableButtons(this.onFirstPage, this.onLastPage);
     });
   };
 
