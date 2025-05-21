@@ -5,7 +5,7 @@ const styles: string = `
 .nav-bar-wrapper {
   display: flex;
   justify-content: center;
-  gap: var(--STANDARD_PADDING);
+  gap: var(--SMALL_PADDING);
 }
 .nav-bar-button {
   background-color: transparent;
