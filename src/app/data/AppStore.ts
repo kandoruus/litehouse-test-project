@@ -6,7 +6,7 @@ import MediaCard from "../components/MediaCard";
 interface AppStoreInterface {
   dataList: MediaData[];
   render(): void;
-  load(): void;
+  load(url?: string): void;
   goToFirstPage(): void;
   goToLastPage(): void;
   goToNextPage(): void;
@@ -25,6 +25,17 @@ export default class AppStore implements AppStoreInterface {
   get dataList(): MediaData[] {
     return this._appData._dataList;
   }
+
+  disableButtons = (): void => {
+    const firstBtn = document.getElementById("first-btn") as HTMLButtonElement;
+    const prevBtn = document.getElementById("prev-btn") as HTMLButtonElement;
+    const nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
+    const lastBtn = document.getElementById("last-btn") as HTMLButtonElement;
+    firstBtn.disabled = true;
+    prevBtn.disabled = true;
+    nextBtn.disabled = true;
+    lastBtn.disabled = true;
+  };
 
   render = (): void => {
     this.#main.innerHTML = "";
@@ -56,37 +67,26 @@ export default class AppStore implements AppStoreInterface {
     window.scrollTo(0, 0);
   };
 
-  load = (): void => {
-    loadKitsuData().then((newData) => {
+  load = (url?: string): void => {
+    this.disableButtons();
+    loadKitsuData(url).then((newData) => {
       this._appData = { ...newData };
       this.render();
     });
   };
 
   goToFirstPage = (): void => {
-    loadKitsuData(this._appData._firstPage).then((newData) => {
-      this._appData = { ...newData };
-      this.render();
-    });
+    this.load(this._appData._firstPage);
   };
   goToLastPage = (): void => {
-    loadKitsuData(this._appData._lastPage).then((newData) => {
-      this._appData = { ...newData };
-      this.render();
-    });
+    this.load(this._appData._lastPage);
   };
   goToNextPage = (): void => {
     if (this._appData._nextPage === "") return;
-    loadKitsuData(this._appData._nextPage).then((newData) => {
-      this._appData = { ...newData };
-      this.render();
-    });
+    this.load(this._appData._nextPage);
   };
   goToPrevPage = (): void => {
     if (this._appData._prevPage === "") return;
-    loadKitsuData(this._appData._prevPage).then((newData) => {
-      this._appData = { ...newData };
-      this.render();
-    });
+    this.load(this._appData._prevPage);
   };
 }
