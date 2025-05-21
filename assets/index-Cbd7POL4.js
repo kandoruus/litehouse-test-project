@@ -48,13 +48,11 @@ h2 {
   flex-flow: column nowrap;
   align-items: center;
   width: 100%;
-  position: relative;
 }
 
 .card figcaption {
   position: absolute;
-  top: 0;
-  z-index: -1;
+  left: -10000px;
 }
 
 .card p {
