@@ -45,12 +45,6 @@ Navigate to `https://kandoruus.github.io/litehouse-test-project/`
 - **Single Source of Truth:** A lightweight global `AppState` singleton manages pagination and data fetching.
 - **Deviation from Requirements** I made the decision to use 12 items per page instead of 10 because that number works better for responsive design since it breaks evenly into 1, 2, 3, or 4 columns. This can be easily adjusted back to 10 by changing the value of the CARDS_PER_PAGE constant in src/app/utils/constants.ts file.
 
-## With More Time
-
-- Add **unit tests** (e.g. with Vitest or Jest) for components.
-- Add **loading states** and **error handling** for API requests.
-- Support offline caching of results.
-
 ## Features Implemented
 
 - Fetches data from the Kitsu API
@@ -59,6 +53,13 @@ Navigate to `https://kandoruus.github.io/litehouse-test-project/`
 - Pagination with `PaginationControlBar`
 - Fully typed with TypeScript
 - Responsive and clean CSS styling
+- Unit Test for the MediaCard Component
+
+## With More Time
+
+- Add unit tests for remaining components and expand on the MediaCard tests.
+- Add error handling for API requests.
+- Support offline caching of results.
 
 ## Questions or Comments?
 
