@@ -1,6 +1,8 @@
-import { BLANK_MEDIA_DATA } from "../app_definitions/constants";
-import type { MediaCardData } from "../app_definitions/types";
+import { BLANK_MEDIA_DATA } from "../utils/constants";
+import { setHidden } from "../utils/functions";
+import type { MediaCardData } from "../utils/types";
 
+// Inline CSS styles to be injected into the Shadow DOM
 const style = `
 * {
   margin: 0;
@@ -14,7 +16,7 @@ img {
 }
 
 :host {
-  display: none;
+  display: block;
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   z-index: 1000;
@@ -41,7 +43,7 @@ img {
   color: var(--DARK_COLOR);
   box-shadow: 5px 5px 15px black;
   overflow: hidden;
-  width: clamp(288px, 80%, 650px)
+  width: clamp(288px, 80%, 650px);
 }
 
 .h2-wrapper {
@@ -78,7 +80,7 @@ h2:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width:100%;
+  width: 100%;
 }
 
 figure {
@@ -96,26 +98,31 @@ p {
   padding: var(--STANDARD_PADDING);
   flex-flow: row nowrap;
   justify-content: space-between;
-  padding: var(--STANDARD_PADDING);
   padding-top: var(--SMALL_PADDING);
-}
-`;
+}`;
 
-export default class MediaModal extends HTMLElement {
+interface MediaModalInterface {
+  show: (data: MediaCardData) => void;
+  close: () => void;
+}
+
+export default class MediaModal extends HTMLElement implements MediaModalInterface {
   private shadow: ShadowRoot = this.attachShadow({ mode: "open" });
   private data: MediaCardData = BLANK_MEDIA_DATA;
 
   constructor() {
     super();
-    this.connectedCallback();
   }
 
-  connectedCallback = () => {
-    this.shadow.innerHTML = `
-      <style>
-        ${style}
-      </style>
+  connectedCallback() {
+    this.render();
+  }
 
+  // Initializes or updates modal content and sets up event listener for closing
+  private render = () => {
+    setHidden(this, this.data === BLANK_MEDIA_DATA);
+    this.shadow.innerHTML = `
+      <style>${style}</style>
       <div class="backdrop">
         <div class="modal">
           <div class="h2-wrapper">
@@ -131,21 +138,25 @@ export default class MediaModal extends HTMLElement {
         </div>
       </div>
     `;
-    const backdrop = this.shadow.querySelector(".backdrop") as HTMLElement;
-    backdrop.addEventListener("click", () => this.close());
+    const backdrop = this.shadow.querySelector(".backdrop");
+    if (backdrop && !backdrop.hasAttribute("data-listener")) {
+      backdrop.addEventListener("click", () => this.close());
+      backdrop.setAttribute("data-listener", "true");
+    }
   };
 
+  // Shows the modal with new data
   show = (data: MediaCardData) => {
     this.data = data;
-    this.connectedCallback();
-    this.style.display = "block";
+    this.render();
   };
 
+  // Closes the modal and resets content
   close = () => {
-    this.style.display = "none";
-    this.connectedCallback();
     this.data = BLANK_MEDIA_DATA;
+    this.render();
   };
 }
 
+// Register the custom element
 customElements.define("media-modal", MediaModal);

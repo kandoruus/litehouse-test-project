@@ -1,3 +1,6 @@
+import { setHidden } from "../utils/functions";
+
+// CSS styles as a string to apply inside shadow DOM
 const styles: string = `
 .nav-bar-wrapper {
   display: flex;
@@ -6,7 +9,7 @@ const styles: string = `
 }
 .nav-bar-button {
   background-color: transparent;
-  border:none;
+  border: none;
   color: var(--LIGHT_COLOR);
   font-size: 1.1rem;
 }
@@ -20,170 +23,162 @@ const styles: string = `
 }
 
 .hidden {
-display: none;
+  display: none;
 }
 `;
 
-const navBtnIds = ["first-btn", "prev-btn", "next-btn", "last-btn"];
+// List of button IDs used in the control bar
+const navBtnIds: string[] = ["first-btn", "prev-btn", "next-btn", "last-btn"];
 
+// Interface to define the lastPageNum setter
 interface PaginationControlBarInterface {
   lastPageNum: number;
 }
 
+// Custom web component for pagination controls
 export default class PaginationControlBar
   extends HTMLElement
   implements PaginationControlBarInterface
 {
+  // Shadow DOM root for encapsulation
   private shadow: ShadowRoot = this.attachShadow({ mode: "open" });
+  // Callback for external page change handling
   private handlePageChange: (newPage: number) => Promise<void>;
+  // Navigation button data: holds page number and button element
   private buttonsData: { pageNumber: number; button: HTMLButtonElement }[] = [];
+  // Current page indicator and associated element
   private currentPage: { pageNumber: number; element: HTMLDivElement };
+  // Ellipsis elements indicating skipped pages
   private firstEllipsis: HTMLDivElement;
   private lastEllipsis: HTMLDivElement;
 
   constructor(handlePageChange: (newPage: number) => Promise<void>) {
     super();
     this.handlePageChange = handlePageChange;
-    this.shadow.innerHTML = `
-      <style>
-        ${styles}
-      </style>
-    `;
+    // Add styles to shadow DOM
+    this.shadow.innerHTML = `<style>${styles}</style>`;
+
     const wrapper = document.createElement("div");
     wrapper.classList.add("nav-bar-wrapper");
 
+    // Create navigation buttons and initialize to page 1
     navBtnIds.forEach((id) => {
       const button = this.createNavBarBtn(id, "1");
-      const pageNumber = 1;
-      this.buttonsData.push({ button, pageNumber });
+      this.buttonsData.push({ button, pageNumber: 1 });
     });
 
+    // Create ellipsis and current page elements
     this.firstEllipsis = this.createEllipsis("first-ellipsis");
     this.lastEllipsis = this.createEllipsis("last-ellipsis");
     this.currentPage = this.createCurrentPageNumber();
-    wrapper.appendChild(this.buttonsData[0].button);
-    wrapper.appendChild(this.firstEllipsis);
-    wrapper.appendChild(this.buttonsData[1].button);
-    wrapper.appendChild(this.currentPage.element);
-    wrapper.appendChild(this.buttonsData[2].button);
-    wrapper.appendChild(this.lastEllipsis);
-    wrapper.appendChild(this.buttonsData[3].button);
+
+    // Append all controls to wrapper in correct order
+    wrapper.append(
+      this.buttonsData[0].button, // first
+      this.firstEllipsis,
+      this.buttonsData[1].button, // prev
+      this.currentPage.element,
+      this.buttonsData[2].button, // next
+      this.lastEllipsis,
+      this.buttonsData[3].button // last
+    );
+
     this.shadow.appendChild(wrapper);
   }
 
+  // Set the last page number and update button label
   set lastPageNum(lastPageNum: number) {
     this.buttonsData[3].pageNumber = lastPageNum;
-    this.buttonsData[3].button.innerText = lastPageNum + "";
+    this.buttonsData[3].button.innerText = lastPageNum.toString();
     this.updateDisplay(1);
   }
 
-  private createNavBarBtn = (id: string, text: string = ""): HTMLButtonElement => {
+  // Create a navigation button and bind click handler
+  private createNavBarBtn(id: string, text: string = ""): HTMLButtonElement {
     const btn = document.createElement("button");
     btn.classList.add("nav-bar-button", "hidden");
     btn.id = id;
     btn.innerHTML = text;
-    btn.onclick = () => {
-      this.handleButtonClick(btn.id);
-    };
+    btn.onclick = () => this.handleButtonClick(btn.id);
     return btn;
-  };
+  }
 
-  private createEllipsis = (id: string): HTMLDivElement => {
-    const p = document.createElement("div");
-    p.classList.add("nav-bar-ellipsis", "hidden");
-    p.id = id;
-    p.innerHTML = "...";
-    return p;
-  };
+  // Create an ellipsis element
+  private createEllipsis(id: string): HTMLDivElement {
+    const div = document.createElement("div");
+    div.classList.add("nav-bar-ellipsis", "hidden");
+    div.id = id;
+    div.innerHTML = "...";
+    return div;
+  }
 
-  private createCurrentPageNumber = (): { pageNumber: number; element: HTMLDivElement } => {
+  // Create the current page display element
+  private createCurrentPageNumber(): { pageNumber: number; element: HTMLDivElement } {
     const element = document.createElement("div");
     element.classList.add("nav-bar-page-number");
     element.innerText = "1";
     return { pageNumber: 1, element };
-  };
+  }
 
-  private handleButtonClick = (btnId: string): void => {
-    const clickedButton = this.buttonsData.find(({ button }) => {
-      return btnId === button.id;
-    });
-    if (clickedButton === undefined) return;
+  // Handle nav button click events
+  private handleButtonClick(btnId: string): void {
+    const clickedButton = this.buttonsData.find(({ button }) => btnId === button.id);
+    if (!clickedButton) return;
+
     const newPage = clickedButton.pageNumber;
     this.disableButtons();
-    this.handlePageChange(clickedButton.pageNumber).then(() => {
+    // Wait for page change to complete, then update UI
+    this.handlePageChange(newPage).then(() => {
       this.updateDisplay(newPage);
       this.enableButtons();
     });
-  };
+  }
 
-  private updateDisplay = (newPage: number): void => {
+  // Update full control bar state for new page
+  private updateDisplay(newPage: number): void {
     this.updateCurrentPage(newPage);
     this.updateBtns(newPage);
     this.updateEllipsis();
-  };
+  }
 
-  private updateCurrentPage = (newPage: number): void => {
+  // Set current page element and state
+  private updateCurrentPage(newPage: number): void {
     this.currentPage.pageNumber = newPage;
-    this.currentPage.element.innerText = newPage + "";
-  };
+    this.currentPage.element.innerText = newPage.toString();
+  }
 
-  private updateBtns = (newPage: number): void => {
-    const firstBtnData = this.buttonsData[0];
-    const prevBtnData = this.buttonsData[1];
-    const nextBtnData = this.buttonsData[2];
-    const lastBtnData = this.buttonsData[3];
+  // Update buttons: visibility and page numbers for prev/next
+  private updateBtns(newPage: number): void {
+    const [firstBtnData, prevBtnData, nextBtnData, lastBtnData] = this.buttonsData;
+
     prevBtnData.pageNumber = newPage - 1;
-    prevBtnData.button.innerText = `${newPage - 1}`;
+    prevBtnData.button.innerText = (newPage - 1).toString();
     nextBtnData.pageNumber = newPage + 1;
-    nextBtnData.button.innerText = `${newPage + 1}`;
+    nextBtnData.button.innerText = (newPage + 1).toString();
 
-    if (newPage - 1 > 1) {
-      firstBtnData.button.classList.remove("hidden");
-      prevBtnData.button.classList.remove("hidden");
-    } else if (newPage - 1 > 0) {
-      firstBtnData.button.classList.add("hidden");
-      prevBtnData.button.classList.remove("hidden");
-    } else {
-      firstBtnData.button.classList.add("hidden");
-      prevBtnData.button.classList.add("hidden");
-    }
+    // Show/hide buttons based on new page context
+    setHidden(firstBtnData.button, !(newPage - 1 > 1));
+    setHidden(prevBtnData.button, !(newPage - 1 > 0));
+    setHidden(lastBtnData.button, !(lastBtnData.pageNumber - newPage > 1));
+    setHidden(nextBtnData.button, !(lastBtnData.pageNumber - newPage > 0));
+  }
 
-    if (lastBtnData.pageNumber - newPage > 1) {
-      lastBtnData.button.classList.remove("hidden");
-      nextBtnData.button.classList.remove("hidden");
-    } else if (lastBtnData.pageNumber - newPage > 0) {
-      lastBtnData.button.classList.add("hidden");
-      nextBtnData.button.classList.remove("hidden");
-    } else {
-      lastBtnData.button.classList.add("hidden");
-      nextBtnData.button.classList.add("hidden");
-    }
-  };
+  // Show or hide ellipsis based on proximity to edges
+  private updateEllipsis(): void {
+    setHidden(this.firstEllipsis, this.currentPage.pageNumber - 1 <= 2);
+    setHidden(this.lastEllipsis, this.buttonsData[3].pageNumber - this.currentPage.pageNumber <= 2);
+  }
 
-  private updateEllipsis = (): void => {
-    if (this.currentPage.pageNumber - 1 <= 2) {
-      this.firstEllipsis.classList.add("hidden");
-    } else {
-      this.firstEllipsis.classList.remove("hidden");
-    }
-    if (this.buttonsData[3].pageNumber - this.currentPage.pageNumber <= 2) {
-      this.lastEllipsis.classList.add("hidden");
-    } else {
-      this.lastEllipsis.classList.remove("hidden");
-    }
-  };
+  // Disable all buttons to prevent spam clicking during async
+  private disableButtons(): void {
+    this.buttonsData.forEach(({ button }) => (button.disabled = true));
+  }
 
-  private disableButtons = (): void => {
-    this.buttonsData.forEach(({ button }) => {
-      button.disabled = true;
-    });
-  };
-
-  private enableButtons = (): void => {
-    this.buttonsData.forEach(({ button }) => {
-      button.disabled = false;
-    });
-  };
+  // Re-enable all buttons after async completes
+  private enableButtons(): void {
+    this.buttonsData.forEach(({ button }) => (button.disabled = false));
+  }
 }
 
+// Register the custom web component
 customElements.define("pagination-control-bar", PaginationControlBar);

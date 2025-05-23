@@ -1,6 +1,8 @@
-import { BLANK_MEDIA_DATA } from "../app_definitions/constants";
-import type { MediaCardData } from "../app_definitions/types";
+import { BLANK_MEDIA_DATA } from "../utils/constants";
+import { setHidden } from "../utils/functions";
+import type { MediaCardData } from "../utils/types";
 
+//css for the component
 const styles: string = `
 * {
   margin: 0;
@@ -22,7 +24,6 @@ img {
   color: var(--DARK_COLOR);
   box-shadow: 5px 5px 15px black;
   overflow: hidden;
-  height: 320px;
   width: 288px
 }
 
@@ -79,48 +80,49 @@ figcaption {
 
 .card-description {
   display: flex;
-  padding: 
-  flex-flow: row nowrap;
-  justify-content: space-between;
+  flex-flow: column nowrap;
+  justify-content: center;
   padding: var(--STANDARD_PADDING);
   padding-top: var(--SMALL_PADDING);
+
 }
 
-p {
+.card-description-p {
   line-height: 1.125rem;
-  height: 1.125rem;
+  height: calc(5*1.125rem);
   background-color: var(--LIGHT_COLOR);
   overflow: hidden;
-  width: 80%;
-  word-break: break-all;
+  text-align: center
 }
 
-.details-btn {
+.details-btn, .mobile-details-btn {
   line-height: 1.125rem;
   height: 1.125rem;
-  width: fit-content;
+  width: 100%;
   white-space: nowrap;
   background-color: transparent;
   border:none;
   color: var(--DARK_COLOR);
   font-size: 1rem;
+  margin-top: var(--SMALL_MARGIN);
+}
+
+.mobile-details-btn {
+    display: none;
+}
+
+.full-height {
+  height: auto;
+  min-height: calc(5*1.125rem);
 }
 
 @media (max-width: 591px){
   .details-btn {
     display: none;
   }
-  p {
-    width: 100%;
-    line-height: 1.125rem;
-    height: auto;
-    background-color: var(--LIGHT_COLOR);
-    overflow: hidden;
-    word-break: normal;
-  }
-  
-  .card {
-    height: auto;
+
+  .mobile-details-btn {
+    display: inline-block;
   }
 }
 `;
@@ -140,13 +142,13 @@ export default class MediaCard extends HTMLElement implements MediaCardInterface
     this._openModal = openModal;
   }
 
-  connectedCallback = () => {
-    if (this.data === BLANK_MEDIA_DATA) {
-      this.shadow.innerHTML = "";
-      this.style.display = "none";
-      return;
-    }
-    this.style.display = "flex";
+  connectedCallback() {
+    this.render();
+  }
+
+  // Handles rendering the component UI based on current data
+  private render = () => {
+    setHidden(this, this.data === BLANK_MEDIA_DATA);
     this.shadow.innerHTML = `
       <style>
         ${styles}
@@ -161,21 +163,44 @@ export default class MediaCard extends HTMLElement implements MediaCardInterface
             <img src="${this.data.imgUrl}" alt="${this.data.title} Poster" height="212px" width="150px"/>
           </figure>
           <div class="card-description">
-            <p>${this.data.description}</p>
+            <p class="card-description-p">${this.data.description}</p>
             <button class="details-btn">...more details</button>
+            <button class="mobile-details-btn">...more details</button>
           </div>
         </div>
       </div>
     `;
+
+    // Add event listeners for the details buttons
     const moreDetailsBtn = this.shadow.querySelector(".details-btn") as HTMLButtonElement;
     moreDetailsBtn.onclick = () => {
       this._openModal(this.data);
     };
+    const mobileDetailsBtn = this.shadow.querySelector(".mobile-details-btn") as HTMLButtonElement;
+    mobileDetailsBtn.onclick = () => {
+      this.applyFullHeight();
+    };
   };
 
+  // Update card data and re-render
   updateCardData = (data: MediaCardData) => {
     this.data = data;
-    this.connectedCallback();
+    this.render();
+  };
+
+  //in mobile view, expand the card instead of opening a modal
+  private applyFullHeight = () => {
+    //get the button and the description
+    const descriptionP = this.shadow.querySelector(".card-description-p") as HTMLParagraphElement;
+    const detailsBtn = this.shadow.querySelector(".mobile-details-btn") as HTMLButtonElement;
+    //toggle the paragraph height
+    descriptionP.classList.toggle("full-height");
+    //toggle the button text
+    if (detailsBtn.innerHTML === "...more details") {
+      detailsBtn.innerHTML = "...less details";
+    } else {
+      detailsBtn.innerHTML = "...more details";
+    }
   };
 }
 
