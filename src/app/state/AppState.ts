@@ -1,6 +1,7 @@
 import type { MediaCardData } from "../utils/types";
 import { fetchPage, transformMediaResponse, getLastPageNumber } from "../utils/mediaApi";
 import { isValidPage } from "../utils/functions";
+import { CARDS_PER_PAGE } from "../utils/constants";
 
 interface AppStateInterface {
   handlePageChange(newPage: number): Promise<void>;
@@ -18,7 +19,7 @@ export default class AppState implements AppStateInterface {
 
   private _currentPageNum: number = 1;
   private _lastPageNum: number = 1;
-  private _cardsPerPage: number = 10;
+  private _cardsPerPage: number = CARDS_PER_PAGE;
   private _baseUrl: string = "";
   private _headers: HeadersInit | undefined = {};
   private _currentPageData: MediaCardData[] = [];
