@@ -132,6 +132,7 @@ export default class PaginationControlBar
 
   // Update full control bar state for new page
   private updateDisplay(newPage: number): void {
+    window.scrollTo(0, 0);
     this.updateCurrentPage(newPage);
     this.updateBtns(newPage);
     this.updateEllipsis();
