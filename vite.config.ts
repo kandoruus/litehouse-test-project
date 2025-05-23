@@ -5,5 +5,11 @@ export default defineConfig({
   base: "/litehouse-test-project/",
   test: {
     environment: "jsdom",
+    coverage: {
+      provider: "v8",
+      reportsDirectory: "./coverage",
+      reporter: ["text", "text-summary", "html"],
+      exclude: ["**/tests/**"],
+    },
   },
 });
