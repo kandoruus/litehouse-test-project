@@ -23,17 +23,11 @@ A simple web app that displays anime media using the Kitsu API. This project dem
    npm run dev
 ```
 
-4. **Build the project:**
-
-```bash
-   npm run build
-```
-
-5. **View in browser:**
+4. **View in browser:**
 
 Navigate to `http://localhost:3000` or the port indicated in your terminal.
 
-6. **Alternatively, view the live build**
+5. **Alternatively, view the live build**
 
 Navigate to `https://kandoruus.github.io/litehouse-test-project/`
 
@@ -43,7 +37,8 @@ Navigate to `https://kandoruus.github.io/litehouse-test-project/`
 - **TypeScript:** Ensures type safety and better developer experience.
 - **Shadow DOM:** Used in components for style and DOM encapsulation.
 - **Single Source of Truth:** A lightweight global `AppState` singleton manages pagination and data fetching.
-- **Deviation from Requirements** I made the decision to use 12 items per page instead of 10 because that number works better for responsive design since it breaks evenly into 1, 2, 3, or 4 columns. This can be easily adjusted back to 10 by changing the value of the CARDS_PER_PAGE constant in src/app/utils/constants.ts file.
+- **Deviation from Requirements** I made the decision to use 12 items per page instead of 10. 12 items per page work better for responsive design, since it breaks evenly into 1, 2, 3, or 4 columns. This can be easily adjusted back to 10 by changing the value of the CARDS_PER_PAGE constant in src/app/utils/constants.ts file.
+- **Mobile and Desktop Friendly** Application uses a Modal to expand on the description section on large screen sizes, but in mobile veiw with a single column, the card's height is expanded instead.
 
 ## Features Implemented
 
@@ -60,7 +55,3 @@ Navigate to `https://kandoruus.github.io/litehouse-test-project/`
 - Add unit tests for remaining components and expand on the MediaCard tests.
 - Add error handling for API requests.
 - Support offline caching of results.
-
-## Questions or Comments?
-
-If you run into issues or have feedback, feel free to reach out to me at: [t.caleb.newell@gmail.com](mailto:t.caleb.newell@gmail.com)
