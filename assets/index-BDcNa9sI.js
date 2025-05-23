@@ -76,30 +76,32 @@ figcaption {
 .card-description {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
-  padding: var(--STANDARD_PADDING);
-  padding-top: var(--SMALL_PADDING);
-
+  align-items: center;
+  padding: var(--SMALL_PADDING) var(--STANDARD_PADDING);
 }
 
 .card-description-p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  text-overflow: ellipsis;
   line-height: 1.125rem;
   height: calc(5*1.125rem);
   background-color: var(--LIGHT_COLOR);
   overflow: hidden;
-  text-align: center
+  text-align: center;
 }
 
 .details-btn, .mobile-details-btn {
-  line-height: 1.125rem;
-  height: 1.125rem;
-  width: 100%;
+  width: fit-content;
   white-space: nowrap;
-  background-color: transparent;
+  background-color: var(--MID_DARK_COLOR);
   border:none;
-  color: var(--DARK_COLOR);
-  font-size: 1rem;
+  color: var(--LIGHT_COLOR);
+  font-size: 0.8rem;
   margin-top: var(--SMALL_MARGIN);
+  padding: var(--SMALL_PADDING);
+  border-radius: 15px;
 }
 
 .mobile-details-btn {
@@ -116,6 +118,10 @@ figcaption {
   }
 
   .full-height {
+    display: block;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
+    text-overflow: clip;
     height: auto;
     min-height: calc(5*1.125rem);
   }
@@ -135,12 +141,12 @@ figcaption {
           </figure>
           <div class="card-description">
             <p class="card-description-p">${this.data.description}</p>
-            <button class="details-btn">...more details</button>
-            <button class="mobile-details-btn">...more details</button>
+            <button class="details-btn">See More</button>
+            <button class="mobile-details-btn">See More</button>
           </div>
         </div>
       </div>
-    `;const t=this.shadow.querySelector(".details-btn");t.onclick=()=>{this._openModal(this.data)};const s=this.shadow.querySelector(".mobile-details-btn");s.onclick=()=>{this.applyFullHeight()}});a(this,"updateCardData",t=>{this.data=t,this.render()});a(this,"applyFullHeight",()=>{const t=this.shadow.querySelector(".card-description-p"),s=this.shadow.querySelector(".mobile-details-btn");t.classList.toggle("full-height"),s.innerHTML==="...more details"?s.innerHTML="...less details":s.innerHTML="...more details"});this.data=s,this._openModal=t}connectedCallback(){this.render()}}customElements.define("media-card",m);const N=`
+    `;const t=this.shadow.querySelector(".details-btn");t.onclick=()=>{this._openModal(this.data)};const s=this.shadow.querySelector(".mobile-details-btn");s.onclick=()=>{this.applyFullHeight()}});a(this,"updateCardData",t=>{this.data=t,this.render()});a(this,"applyFullHeight",()=>{const t=this.shadow.querySelector(".card-description-p"),s=this.shadow.querySelector(".mobile-details-btn");t.classList.toggle("full-height"),s.innerHTML==="See More"?s.innerHTML="See Less":s.innerHTML="See More"});this.data=s,this._openModal=t}connectedCallback(){this.render()}}customElements.define("media-card",m);const N=`
 * {
   margin: 0;
   padding: 0;
@@ -302,4 +308,4 @@ p {
 .hidden {
   display: none;
 }
-`,C=["first-btn","prev-btn","next-btn","last-btn"];class f extends HTMLElement{constructor(t){super();a(this,"shadow",this.attachShadow({mode:"open"}));a(this,"handlePageChange");a(this,"buttonsData",[]);a(this,"currentPage");a(this,"firstEllipsis");a(this,"lastEllipsis");this.handlePageChange=t,this.shadow.innerHTML=`<style>${A}</style>`;const s=document.createElement("div");s.classList.add("nav-bar-wrapper"),C.forEach(i=>{const n=this.createNavBarBtn(i,"1");this.buttonsData.push({button:n,pageNumber:1})}),this.firstEllipsis=this.createEllipsis("first-ellipsis"),this.lastEllipsis=this.createEllipsis("last-ellipsis"),this.currentPage=this.createCurrentPageNumber(),s.append(this.buttonsData[0].button,this.firstEllipsis,this.buttonsData[1].button,this.currentPage.element,this.buttonsData[2].button,this.lastEllipsis,this.buttonsData[3].button),this.shadow.appendChild(s)}set lastPageNum(t){this.buttonsData[3].pageNumber=t,this.buttonsData[3].button.innerText=t.toString(),this.updateDisplay(1)}createNavBarBtn(t,s=""){const i=document.createElement("button");return i.classList.add("nav-bar-button","hidden"),i.id=t,i.innerHTML=s,i.onclick=()=>this.handleButtonClick(i.id),i}createEllipsis(t){const s=document.createElement("div");return s.classList.add("nav-bar-ellipsis","hidden"),s.id=t,s.innerHTML="...",s}createCurrentPageNumber(){const t=document.createElement("div");return t.classList.add("nav-bar-page-number"),t.innerText="1",{pageNumber:1,element:t}}handleButtonClick(t){const s=this.buttonsData.find(({button:n})=>t===n.id);if(!s)return;const i=s.pageNumber;this.disableButtons(),this.handlePageChange(i).then(()=>{this.enableButtons()}),this.updateDisplay(i)}updateDisplay(t){this.updateCurrentPage(t),this.updateBtns(t),this.updateEllipsis()}updateCurrentPage(t){this.currentPage.pageNumber=t,this.currentPage.element.innerText=t.toString()}updateBtns(t){const[s,i,n,d]=this.buttonsData;i.pageNumber=t-1,i.button.innerText=(t-1).toString(),n.pageNumber=t+1,n.button.innerText=(t+1).toString(),o(s.button,!(t-1>1)),o(i.button,!(t-1>0)),o(d.button,!(d.pageNumber-t>1)),o(n.button,!(d.pageNumber-t>0))}updateEllipsis(){o(this.firstEllipsis,this.currentPage.pageNumber-1<=2),o(this.lastEllipsis,this.buttonsData[3].pageNumber-this.currentPage.pageNumber<=2)}disableButtons(){this.buttonsData.forEach(({button:t})=>t.disabled=!0)}enableButtons(){this.buttonsData.forEach(({button:t})=>t.disabled=!1)}}customElements.define("pagination-control-bar",f);async function u(r,e,t,s){const i=(e-1)*t;return await(await fetch(`${r}${i}`,{headers:s})).json()}function g(r){return r.data.map(({attributes:e})=>({title:e.canonicalTitle,description:e.description,imgUrl:e.posterImage.small}))}function T(r,e){return Math.ceil(r/e)}const h=class h{constructor(){a(this,"_currentPageNum",1);a(this,"_lastPageNum",1);a(this,"_cardsPerPage",c);a(this,"_baseUrl","");a(this,"_headers",{});a(this,"_currentPageData",[]);a(this,"_firstPageData",[]);a(this,"_prevPageData",[]);a(this,"_nextPageData",[]);a(this,"_lastPageData",[]);a(this,"_updateMediaCardList",e=>{});a(this,"init",async(e,t,s,i)=>{this._cardsPerPage=e,this._baseUrl=t,this._headers=s,this._updateMediaCardList=i;const n=await u(t,1,e,s);this._currentPageData=g(n),this._firstPageData=this._currentPageData,this._updateMediaCardList(this._currentPageData),this._lastPageNum=T(n.meta.count,e),this._lastPageData=await this.getPageData(this._lastPageNum),await this.updateNextPageData()});a(this,"getPageData",async e=>{const t=await u(this._baseUrl,e,this._cardsPerPage,this._headers);return g(t)});a(this,"updatePrevPageData",async()=>{this._prevPageData=await this.getPageData(Math.max(this._currentPageNum-1,1))});a(this,"updateNextPageData",async()=>{this._nextPageData=await this.getPageData(Math.min(this._currentPageNum+1,this._lastPageNum))});a(this,"handlePageChange",async e=>{x(e,this._currentPageNum,this._lastPageNum)&&(e===1?await this.goToFirstPage():e===this._lastPageNum?await this.goToLastPage():e===this._currentPageNum+1?await this.goToNextPage():e===this._currentPageNum-1?await this.goToPrevPage():await this.goToPage(e))});a(this,"goToFirstPage",async()=>{this._updateMediaCardList(this._firstPageData),this._currentPageData=this._firstPageData,this._prevPageData=this._firstPageData,this._currentPageNum=1,await this.updateNextPageData()});a(this,"goToLastPage",async()=>{this._updateMediaCardList(this._lastPageData),this._currentPageData=this._lastPageData,this._nextPageData=this._lastPageData,this._currentPageNum=this._lastPageNum,await this.updatePrevPageData()});a(this,"goToNextPage",async()=>{this._updateMediaCardList(this._nextPageData),this._prevPageData=this._currentPageData,this._currentPageData=this._nextPageData,this._currentPageNum+=1,await this.updateNextPageData()});a(this,"goToPrevPage",async()=>{this._updateMediaCardList(this._prevPageData),this._nextPageData=this._currentPageData,this._currentPageData=this._prevPageData,this._currentPageNum-=1,await this.updatePrevPageData()});a(this,"goToPage",async e=>{this._currentPageData=await this.getPageData(e),this._updateMediaCardList(this._currentPageData),this._currentPageNum=e,await this.updatePrevPageData(),await this.updateNextPageData()})}get lastPageNum(){return this._lastPageNum}};a(h,"instance",new h);let p=h;const M=async()=>{const r=p.instance,e=document.getElementById("main"),t=new D(c);e.appendChild(t);const s=document.getElementById("footer"),i=new f(r.handlePageChange);s.appendChild(i),await r.init(c,w,v,t.updateMediaCardList),i.lastPageNum=r.lastPageNum};document.addEventListener("DOMContentLoaded",M);
+`,C=["first-btn","prev-btn","next-btn","last-btn"];class f extends HTMLElement{constructor(t){super();a(this,"shadow",this.attachShadow({mode:"open"}));a(this,"handlePageChange");a(this,"buttonsData",[]);a(this,"currentPage");a(this,"firstEllipsis");a(this,"lastEllipsis");this.handlePageChange=t,this.shadow.innerHTML=`<style>${A}</style>`;const s=document.createElement("div");s.classList.add("nav-bar-wrapper"),C.forEach(i=>{const n=this.createNavBarBtn(i,"1");this.buttonsData.push({button:n,pageNumber:1})}),this.firstEllipsis=this.createEllipsis("first-ellipsis"),this.lastEllipsis=this.createEllipsis("last-ellipsis"),this.currentPage=this.createCurrentPageNumber(),s.append(this.buttonsData[0].button,this.firstEllipsis,this.buttonsData[1].button,this.currentPage.element,this.buttonsData[2].button,this.lastEllipsis,this.buttonsData[3].button),this.shadow.appendChild(s)}set lastPageNum(t){this.buttonsData[3].pageNumber=t,this.buttonsData[3].button.innerText=t.toString(),this.updateDisplay(1)}createNavBarBtn(t,s=""){const i=document.createElement("button");return i.classList.add("nav-bar-button","hidden"),i.id=t,i.innerHTML=s,i.onclick=()=>this.handleButtonClick(i.id),i}createEllipsis(t){const s=document.createElement("div");return s.classList.add("nav-bar-ellipsis","hidden"),s.id=t,s.innerHTML="...",s}createCurrentPageNumber(){const t=document.createElement("div");return t.classList.add("nav-bar-page-number"),t.innerText="1",{pageNumber:1,element:t}}handleButtonClick(t){const s=this.buttonsData.find(({button:n})=>t===n.id);if(!s)return;const i=s.pageNumber;this.disableButtons(),this.handlePageChange(i).then(()=>{this.enableButtons()}),this.updateDisplay(i)}updateDisplay(t){window.scrollTo(0,0),this.updateCurrentPage(t),this.updateBtns(t),this.updateEllipsis()}updateCurrentPage(t){this.currentPage.pageNumber=t,this.currentPage.element.innerText=t.toString()}updateBtns(t){const[s,i,n,d]=this.buttonsData;i.pageNumber=t-1,i.button.innerText=(t-1).toString(),n.pageNumber=t+1,n.button.innerText=(t+1).toString(),o(s.button,!(t-1>1)),o(i.button,!(t-1>0)),o(d.button,!(d.pageNumber-t>1)),o(n.button,!(d.pageNumber-t>0))}updateEllipsis(){o(this.firstEllipsis,this.currentPage.pageNumber-1<=2),o(this.lastEllipsis,this.buttonsData[3].pageNumber-this.currentPage.pageNumber<=2)}disableButtons(){this.buttonsData.forEach(({button:t})=>t.disabled=!0)}enableButtons(){this.buttonsData.forEach(({button:t})=>t.disabled=!1)}}customElements.define("pagination-control-bar",f);async function u(r,e,t,s){const i=(e-1)*t;return await(await fetch(`${r}${i}`,{headers:s})).json()}function g(r){return r.data.map(({attributes:e})=>({title:e.canonicalTitle,description:e.description,imgUrl:e.posterImage.small}))}function M(r,e){return Math.ceil(r/e)}const h=class h{constructor(){a(this,"_currentPageNum",1);a(this,"_lastPageNum",1);a(this,"_cardsPerPage",c);a(this,"_baseUrl","");a(this,"_headers",{});a(this,"_currentPageData",[]);a(this,"_firstPageData",[]);a(this,"_prevPageData",[]);a(this,"_nextPageData",[]);a(this,"_lastPageData",[]);a(this,"_updateMediaCardList",e=>{});a(this,"init",async(e,t,s,i)=>{this._cardsPerPage=e,this._baseUrl=t,this._headers=s,this._updateMediaCardList=i;const n=await u(t,1,e,s);this._currentPageData=g(n),this._firstPageData=this._currentPageData,this._updateMediaCardList(this._currentPageData),this._lastPageNum=M(n.meta.count,e),this._lastPageData=await this.getPageData(this._lastPageNum),await this.updateNextPageData()});a(this,"getPageData",async e=>{const t=await u(this._baseUrl,e,this._cardsPerPage,this._headers);return g(t)});a(this,"updatePrevPageData",async()=>{this._prevPageData=await this.getPageData(Math.max(this._currentPageNum-1,1))});a(this,"updateNextPageData",async()=>{this._nextPageData=await this.getPageData(Math.min(this._currentPageNum+1,this._lastPageNum))});a(this,"handlePageChange",async e=>{x(e,this._currentPageNum,this._lastPageNum)&&(e===1?await this.goToFirstPage():e===this._lastPageNum?await this.goToLastPage():e===this._currentPageNum+1?await this.goToNextPage():e===this._currentPageNum-1?await this.goToPrevPage():await this.goToPage(e))});a(this,"goToFirstPage",async()=>{this._updateMediaCardList(this._firstPageData),this._currentPageData=this._firstPageData,this._prevPageData=this._firstPageData,this._currentPageNum=1,await this.updateNextPageData()});a(this,"goToLastPage",async()=>{this._updateMediaCardList(this._lastPageData),this._currentPageData=this._lastPageData,this._nextPageData=this._lastPageData,this._currentPageNum=this._lastPageNum,await this.updatePrevPageData()});a(this,"goToNextPage",async()=>{this._updateMediaCardList(this._nextPageData),this._prevPageData=this._currentPageData,this._currentPageData=this._nextPageData,this._currentPageNum+=1,await this.updateNextPageData()});a(this,"goToPrevPage",async()=>{this._updateMediaCardList(this._prevPageData),this._nextPageData=this._currentPageData,this._currentPageData=this._prevPageData,this._currentPageNum-=1,await this.updatePrevPageData()});a(this,"goToPage",async e=>{this._currentPageData=await this.getPageData(e),this._updateMediaCardList(this._currentPageData),this._currentPageNum=e,await this.updatePrevPageData(),await this.updateNextPageData()})}get lastPageNum(){return this._lastPageNum}};a(h,"instance",new h);let p=h;const T=async()=>{const r=p.instance,e=document.getElementById("main"),t=new D(c);e.appendChild(t);const s=document.getElementById("footer"),i=new f(r.handlePageChange);s.appendChild(i),await r.init(c,w,v,t.updateMediaCardList),i.lastPageNum=r.lastPageNum};document.addEventListener("DOMContentLoaded",T);
