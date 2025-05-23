@@ -111,11 +111,6 @@ figcaption {
     display: none;
 }
 
-.full-height {
-  height: auto;
-  min-height: calc(5*1.125rem);
-}
-
 @media (max-width: 591px){
   .details-btn {
     display: none;
@@ -123,6 +118,11 @@ figcaption {
 
   .mobile-details-btn {
     display: inline-block;
+  }
+
+  .full-height {
+    height: auto;
+    min-height: calc(5*1.125rem);
   }
 }
 `;
