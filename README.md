@@ -59,3 +59,4 @@ Navigate to `https://kandoruus.github.io/litehouse-test-project/`
 - Add error handling for API requests.
 - Support offline caching of results.
 - The description text styling currently feels very generic, I would work on making it stand out more.
+- Clean up the AppState by better separating concerns. For instance, potentially moving the "goToPage" methods to a separate AppController.
