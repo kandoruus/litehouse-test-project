@@ -13,9 +13,6 @@ const styles: string = `
   color: var(--LIGHT_COLOR);
   font-size: 1.1rem;
 }
-.nav-bar-button:disabled {
-  color: var(--DISABLED_COLOR);
-}
 
 .nav-bar-page-number {
   font-size: 1.5rem;
@@ -127,11 +124,10 @@ export default class PaginationControlBar
 
     const newPage = clickedButton.pageNumber;
     this.disableButtons();
-    // Wait for page change to complete, then update UI
     this.handlePageChange(newPage).then(() => {
-      this.updateDisplay(newPage);
       this.enableButtons();
     });
+    this.updateDisplay(newPage);
   }
 
   // Update full control bar state for new page
