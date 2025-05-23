@@ -27,19 +27,26 @@ A simple web app that displays anime media using the Kitsu API. This project dem
 
 Navigate to `http://localhost:3000` or the port indicated in your terminal.
 
-5. **Alternatively, view the live build**
+5. **Alternatively, view the live build:**
 
 Navigate to `https://kandoruus.github.io/litehouse-test-project/`
 
 ## Design Decisions
 
-- **Web Components:** Used to create encapsulated and reusable UI components (`MediaCard`, `MediaCardList`, `MediaModal`).
-- **TypeScript:** Ensures type safety and better developer experience.
-- **Shadow DOM:** Used in components for style and DOM encapsulation.
-- **Single Source of Truth:** A lightweight global `AppState` singleton manages pagination and data fetching.
-- **Deviation from Requirements** I made the decision to use 12 items per page instead of 10. 12 items per page work better for responsive design, since it breaks evenly into 1, 2, 3, or 4 columns. This can be easily adjusted back to 10 by changing the value of the CARDS_PER_PAGE constant in src/app/utils/constants.ts file.
-- **Mobile and Desktop Friendly** Application uses a Modal to expand on the description section on large screen sizes, but in mobile view with a single column, the card's height is expanded instead.
-- **Preloading Data for Smoother User Experience** When the App is initialized, API calls are made to fetch the data for the Next and Last pages immediately after the First page renders. When navigating the App, preloading occurs after each new page is loaded to ensure the data for the First, Prev, Next, and Last pages is available. This way each new page can load without requiring the user to wait on API calls.
+- **Web Components:**
+  Used to create encapsulated and reusable UI components (`MediaCard`, `MediaCardList`, `MediaModal`).
+- **TypeScript:**
+  Ensures type safety and better developer experience.
+- **Shadow DOM:**
+  Used in components for style and DOM encapsulation.
+- **Single Source of Truth:**
+  A lightweight global `AppState` singleton manages pagination and data fetching.
+- **Deviation from Requirements:**
+  I made the decision to use 12 items per page instead of 10. 12 items per page work better for responsive design, since it breaks evenly into 1, 2, 3, or 4 columns. This can be easily adjusted back to 10 by changing the value of the CARDS_PER_PAGE constant in src/app/utils/constants.ts file.
+- **Mobile and Desktop Friendly:**
+  Application uses a Modal to expand on the description section on large screen sizes, but in mobile view with a single column, the card's height is expanded instead.
+- **Preloading Data for Smoother User Experience:**
+  When the App is initialized, API calls are made to fetch the data for the Next and Last pages immediately after the First page renders. When navigating the App, preloading occurs after each new page is loaded to ensure the data for the First, Prev, Next, and Last pages is available. This way each new page can load without requiring the user to wait on API calls.
 
 ## Features Implemented
 
