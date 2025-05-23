@@ -51,11 +51,11 @@ describe("MediaCard Web Component", () => {
     const paragraph = shadow.querySelector(".card-description-p") as HTMLParagraphElement;
 
     expect(paragraph.classList.contains("full-height")).toBe(false);
-    expect(button.textContent).toBe("...more details");
+    expect(button.textContent).toBe("See More");
 
     button.click();
 
     expect(paragraph.classList.contains("full-height")).toBe(true);
-    expect(button.textContent).toBe("...less details");
+    expect(button.textContent).toBe("See Less");
   });
 });

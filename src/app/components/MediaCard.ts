@@ -81,30 +81,32 @@ figcaption {
 .card-description {
   display: flex;
   flex-flow: column nowrap;
-  justify-content: center;
-  padding: var(--STANDARD_PADDING);
-  padding-top: var(--SMALL_PADDING);
-
+  align-items: center;
+  padding: var(--SMALL_PADDING) var(--STANDARD_PADDING);
 }
 
 .card-description-p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  text-overflow: ellipsis;
   line-height: 1.125rem;
   height: calc(5*1.125rem);
   background-color: var(--LIGHT_COLOR);
   overflow: hidden;
-  text-align: center
+  text-align: center;
 }
 
 .details-btn, .mobile-details-btn {
-  line-height: 1.125rem;
-  height: 1.125rem;
-  width: 100%;
+  width: fit-content;
   white-space: nowrap;
-  background-color: transparent;
+  background-color: var(--MID_DARK_COLOR);
   border:none;
-  color: var(--DARK_COLOR);
-  font-size: 1rem;
+  color: var(--LIGHT_COLOR);
+  font-size: 0.8rem;
   margin-top: var(--SMALL_MARGIN);
+  padding: var(--SMALL_PADDING);
+  border-radius: 15px;
 }
 
 .mobile-details-btn {
@@ -121,6 +123,10 @@ figcaption {
   }
 
   .full-height {
+    display: block;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
+    text-overflow: clip;
     height: auto;
     min-height: calc(5*1.125rem);
   }
@@ -164,8 +170,8 @@ export default class MediaCard extends HTMLElement implements MediaCardInterface
           </figure>
           <div class="card-description">
             <p class="card-description-p">${this.data.description}</p>
-            <button class="details-btn">...more details</button>
-            <button class="mobile-details-btn">...more details</button>
+            <button class="details-btn">See More</button>
+            <button class="mobile-details-btn">See More</button>
           </div>
         </div>
       </div>
@@ -196,10 +202,10 @@ export default class MediaCard extends HTMLElement implements MediaCardInterface
     //toggle the paragraph height
     descriptionP.classList.toggle("full-height");
     //toggle the button text
-    if (detailsBtn.innerHTML === "...more details") {
-      detailsBtn.innerHTML = "...less details";
+    if (detailsBtn.innerHTML === "See More") {
+      detailsBtn.innerHTML = "See Less";
     } else {
-      detailsBtn.innerHTML = "...more details";
+      detailsBtn.innerHTML = "See More";
     }
   };
 }
