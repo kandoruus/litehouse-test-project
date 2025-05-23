@@ -38,7 +38,8 @@ Navigate to `https://kandoruus.github.io/litehouse-test-project/`
 - **Shadow DOM:** Used in components for style and DOM encapsulation.
 - **Single Source of Truth:** A lightweight global `AppState` singleton manages pagination and data fetching.
 - **Deviation from Requirements** I made the decision to use 12 items per page instead of 10. 12 items per page work better for responsive design, since it breaks evenly into 1, 2, 3, or 4 columns. This can be easily adjusted back to 10 by changing the value of the CARDS_PER_PAGE constant in src/app/utils/constants.ts file.
-- **Mobile and Desktop Friendly** Application uses a Modal to expand on the description section on large screen sizes, but in mobile veiw with a single column, the card's height is expanded instead.
+- **Mobile and Desktop Friendly** Application uses a Modal to expand on the description section on large screen sizes, but in mobile view with a single column, the card's height is expanded instead.
+- **Preloading Data for Smoother User Experience** When the App is initialized, API calls are made to fetch the data for the Next and Last pages immediately after the First page renders. When navigating the App, preloading occurs after each new page is loaded to ensure the data for the First, Prev, Next, and Last pages is available. This way each new page can load without requiring the user to wait on API calls.
 
 ## Features Implemented
 
@@ -47,12 +48,14 @@ Navigate to `https://kandoruus.github.io/litehouse-test-project/`
 - Reusable Web Components: `MediaCard`, `MediaCardList`, `MediaModal`
 - Pagination with `PaginationControlBar`
 - Fully typed with TypeScript
-- Responsive and clean CSS styling
+- Responsive design and clean CSS styling
 - Unit Test for the MediaCard Component
+- Tested accessibility via `https://wave.webaim.org/` with 0 Errors or Alerts. However, with so many of the App's semantic elements nested in the Shadow DOM of various custom components, I think
+  the tool may not be getting the full picture.
 
 ## With More Time
 
-- Add unit tests for remaining components and expand on the MediaCard tests.
+- Add unit tests for remaining components, the App only has 8% coverage per the vitest coverage tester. I did achieve 100% coverage for the MediaCard component.
 - Add error handling for API requests.
 - Support offline caching of results.
-- The description text styling currently feels very generic, I would work of making it stand out more.
+- The description text styling currently feels very generic, I would work on making it stand out more.
