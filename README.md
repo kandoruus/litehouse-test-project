@@ -55,3 +55,4 @@ Navigate to `https://kandoruus.github.io/litehouse-test-project/`
 - Add unit tests for remaining components and expand on the MediaCard tests.
 - Add error handling for API requests.
 - Support offline caching of results.
+- The description text styling currently feels very generic, I would work of making it stand out more.
