@@ -106,11 +106,6 @@ figcaption {
     display: none;
 }
 
-.full-height {
-  height: auto;
-  min-height: calc(5*1.125rem);
-}
-
 @media (max-width: 591px){
   .details-btn {
     display: none;
@@ -118,6 +113,11 @@ figcaption {
 
   .mobile-details-btn {
     display: inline-block;
+  }
+
+  .full-height {
+    height: auto;
+    min-height: calc(5*1.125rem);
   }
 }
 `;class m extends HTMLElement{constructor(t,s=l){super();a(this,"shadow",this.attachShadow({mode:"open"}));a(this,"_openModal");a(this,"data");a(this,"render",()=>{o(this,this.data===l),this.shadow.innerHTML=`
