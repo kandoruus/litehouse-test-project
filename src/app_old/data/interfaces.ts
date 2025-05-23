@@ -3,7 +3,7 @@ export interface KitsuData {
     attributes: {
       description: string;
       posterImage: {
-        medium: string;
+        small: string;
       };
       canonicalTitle: string;
     };

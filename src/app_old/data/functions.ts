@@ -2,12 +2,15 @@ import type { KitsuData } from "./interfaces";
 import { KITSU_DEFAULT_URL, KITSU_HEADERS } from "./constants";
 import type { AppData, MediaData } from "./types";
 
+//TODO switch to OFFSET to keep track of PAGINATION
 export const loadKitsuData = async (url: string = KITSU_DEFAULT_URL): Promise<AppData> => {
   const response = await fetch(url, { headers: KITSU_HEADERS });
-  const { data, links } = (await response.json()) as KitsuData;
+  const temp = (await response.json()) as KitsuData;
+  console.log(temp);
+  const { data, links } = temp;
   const _dataList: MediaData[] = data.map((mediaItem) => {
     const { canonicalTitle, description, posterImage } = mediaItem.attributes;
-    const mediaData: MediaData = { title: canonicalTitle, description, imgUrl: posterImage.medium };
+    const mediaData: MediaData = { title: canonicalTitle, description, imgUrl: posterImage.small };
     return mediaData;
   });
   const appData: AppData = {

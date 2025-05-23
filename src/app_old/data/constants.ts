@@ -14,7 +14,8 @@ export const KITSU_HEADERS = {
   "Content-Type": "application/vnd.api+json",
 };
 
-export const KITSU_DEFAULT_URL = "https://kitsu.io/api/edge/anime?page[limit]=10";
+export const KITSU_DEFAULT_URL =
+  "https://kitsu.io/api/edge/anime?page%5Blimit%5D=12&page%5Boffset%5D=";
 
 export const MAIN_CSS = "./src/app/styles.css";
 

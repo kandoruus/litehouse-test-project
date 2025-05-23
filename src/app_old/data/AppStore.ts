@@ -19,11 +19,11 @@ interface AppStoreInterface {
 export default class AppStore implements AppStoreInterface {
   static instance: AppStore = new AppStore();
 
-  #main: HTMLElement;
+  #mediaList: HTMLElement;
   #navBar: NavBar;
 
   constructor(private _appData: AppData = BLANK_APP_DATA) {
-    this.#main = document.getElementById("main") as HTMLElement;
+    this.#mediaList = document.getElementById("media-list") as HTMLElement;
     const footer = document.getElementById("footer") as HTMLElement;
     this.#navBar = new NavBar([
       this.goToFirstPage,
@@ -47,11 +47,11 @@ export default class AppStore implements AppStoreInterface {
   }
 
   render = (): void => {
-    this.#main.innerHTML = "";
+    this.#mediaList.innerHTML = "";
     this._appData._dataList.forEach((dataItem) => {
       const { title, description, imgUrl } = dataItem;
       const mediaCard = new MediaCard(title, description, imgUrl);
-      this.#main.appendChild(mediaCard);
+      this.#mediaList.appendChild(mediaCard);
     });
     window.scrollTo(0, 0);
   };

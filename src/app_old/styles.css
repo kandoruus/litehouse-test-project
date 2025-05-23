@@ -26,6 +26,7 @@ img {
   --SMALL_PADDING: 0.5rem;
   --STANDARD_MARGIN: 1rem;
   --SMALL_MARGIN: 0.5rem;
+  --CARD_WIDTH: 288px;
   --CARD_HEIGHT: max(320px, calc((100vh - var(--STANDARD_MARGIN) * 3 - 39px - 69px) / 2));
 }
 
@@ -72,8 +73,19 @@ footer {
 }
 
 /* Main Section */
-main {
+.media-list {
   display: flex;
-  flex-direction: column;
   flex-grow: 1;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--STANDARD_PADDING);
+  width: clamp(320px, 100%, 1300px);
+  align-self: center;
+  padding: var(--STANDARD_PADDING) 0;
+  margin: 0 auto;
+}
+
+media-card {
+  width: var(--CARD_WIDTH);
 }

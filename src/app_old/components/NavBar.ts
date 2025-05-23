@@ -11,7 +11,7 @@ const styles: string = `
   background-color: transparent;
   border:none;
   color: var(--LIGHT_COLOR);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 .nav-bar-button:disabled {
   color: var(--DISABLED_COLOR);
