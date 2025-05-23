@@ -149,6 +149,7 @@ figcaption {
 img {
   display: block;
   max-width: 100%;
+  max-height: 100%;
   height: auto;
 }
 
@@ -180,7 +181,8 @@ img {
   color: var(--DARK_COLOR);
   box-shadow: 5px 5px 15px black;
   overflow: hidden;
-  width: clamp(288px, 80%, 650px);
+  width: clamp(288px, 80%, 500px);
+  max-height: 80vh;
 }
 
 .h2-wrapper {
@@ -218,6 +220,7 @@ h2:hover {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  overflow-y: auto;
 }
 
 figure {
@@ -236,6 +239,7 @@ p {
   flex-flow: row nowrap;
   justify-content: space-between;
   padding-top: var(--SMALL_PADDING);
+  text-align: center;
 }`;class b extends HTMLElement{constructor(){super();a(this,"shadow",this.attachShadow({mode:"open"}));a(this,"data",l);a(this,"render",()=>{o(this,this.data===l),this.shadow.innerHTML=`
       <style>${N}</style>
       <div class="backdrop">
@@ -246,7 +250,7 @@ p {
           <div class="details-wrapper">
             <figure>
               <figcaption>${this.data.title}</figcaption>
-              <img src="${this.data.imgUrl}" alt="${this.data.title} Poster" height="402px" width="284px"/>
+              <img src="${this.data.imgUrl}" alt="${this.data.title} Poster" height="283px" width="200px"/>
             </figure>
             <p>${this.data.description}</p>
           </div>
